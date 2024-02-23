@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+        integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <form action="">
+        <label for="id">ID</label>
+        <input type="number" id="id" name="id">
+        <input type="button" value="Requisitar" id="botao">
+    </form>
+    <table>
+        <thead>
+            <th>id</th>
+            <th>nome</th>
+            <th>idade</th>
+        </thead>
+        <tbody id="registro">
+
+        </tbody>
+    </table>
+
+    <script>
+        //Só executa quando a página estiver totalmente carregada
+        $(document).ready(function () {
+
+            // Executa o código quando o botão for clicado
+            $('#botao').click(function () { //executa ao clicar no botão
+                if ($('#number').val() == '') {//verifica se input == vazio
+                    $.ajax({//retorno assíncrono
+                        url: 'api.php/usuarios',//caminho
+                        dataType: 'json',//tipo de retorno
+                        type: 'GET',//método
+                        success: function (data) {//executa ao retornar success
+                            $.each(data, function (key, value) {// faz each com os dados : key=nome |value=valor| data=retorno servidor
+                                let row = $('<tr>').appendTo('#registro');//cria a linha
+                                $('<td>').text(value.id).appendTo(row);
+                                $('<td>').text(value.nome).appendTo(row);
+                                $('<td>').text(value.idade).appendTo(row);//adiciona as colunas á linha
+                            })
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    })
+                }else {
+                    let id = $('#number').val();
+
+                    $.ajax({
+                        url: `api.php/usuario/${id}`,
+                        dataType: 'json',
+                        type: 'GET',
+                        success: function (data) {
+                            let row = $('<tr>').appendTo('#registro');
+                            $('<td>').text(data.id).appendTo(row);
+                            $('<td>').text(data.nome).appendTo(row);
+                            $('<td>').text(data.idade).appendTo(row);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                        }
+                    })
+                }
+
+
+
+            }
+
+            );
+        });
+    </script>
+</body>
+
+</html>
