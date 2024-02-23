@@ -17,9 +17,11 @@
     </form>
     <table>
         <thead>
-            <th>id</th>
-            <th>nome</th>
-            <th>idade</th>
+            <tr>
+                <th>id</th>
+                <th>nome</th>
+                <th>idade</th>
+            </tr>
         </thead>
         <tbody id="registro">
 
@@ -32,7 +34,8 @@
 
             // Executa o código quando o botão for clicado
             $('#botao').click(function () { //executa ao clicar no botão
-                if ($('#number').val() == '') {//verifica se input == vazio
+                $('#registro').empty();
+                if ($('#id').val() == '') {//verifica se input == vazio
                     $.ajax({//retorno assíncrono
                         url: 'api.php/usuarios',//caminho
                         dataType: 'json',//tipo de retorno
@@ -43,14 +46,14 @@
                                 $('<td>').text(value.id).appendTo(row);
                                 $('<td>').text(value.nome).appendTo(row);
                                 $('<td>').text(value.idade).appendTo(row);//adiciona as colunas á linha
-                            })
+                            });
                         },
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })
-                }else {
-                    let id = $('#number').val();
+                    });
+                } else {
+                    let id = $('#id').val();
 
                     $.ajax({
                         url: `api.php/usuario/${id}`,
@@ -65,14 +68,9 @@
                         error: function (xhr, status, error) {
                             console.error(error);
                         }
-                    })
+                    });
                 }
-
-
-
-            }
-
-            );
+            });
         });
     </script>
 </body>
