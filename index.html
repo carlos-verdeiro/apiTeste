@@ -12,16 +12,13 @@
         integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <form action="">
         <label for="id">ID</label>
-        <input type="number" id="id" name="id">
+        <input type="number" id="id" name="id" placeholder="Vazio para ver todos">
         <input type="button" value="Requisitar" id="botao">
+        <input type="button" value="Limpar" id="limpar">
     </form>
-    <table>
-        <thead>
-            <tr>
-                <th>id</th>
-                <th>nome</th>
-                <th>idade</th>
-            </tr>
+    <table id="tabela">
+        <thead id="cabecalho">
+
         </thead>
         <tbody id="registro">
 
@@ -32,15 +29,23 @@
         //Só executa quando a página estiver totalmente carregada
         $(document).ready(function () {
 
+            $('#limpar').click(function () {
+                $('#id').val("");
+                $('#cabecalho').empty();
+                $('#registro').empty();
+            });
+
             // Executa o código quando o botão for clicado
             $('#botao').click(function () { //executa ao clicar no botão
                 $('#registro').empty();
+                $('#cabecalho').empty();
                 if ($('#id').val() == '') {//verifica se input == vazio
                     $.ajax({//retorno assíncrono
                         url: 'api.php/usuarios',//caminho
                         dataType: 'json',//tipo de retorno
                         type: 'GET',//método
                         success: function (data) {//executa ao retornar success
+                            $("#cabecalho").append("<tr><th>ID</th><th>Nome</th><th>Idade</th></tr>");
                             $.each(data, function (key, value) {// faz each com os dados : key=nome |value=valor| data=retorno servidor
                                 let row = $('<tr>').appendTo('#registro');//cria a linha
                                 $('<td>').text(value.id).appendTo(row);
@@ -60,6 +65,7 @@
                         dataType: 'json',
                         type: 'GET',
                         success: function (data) {
+                            $("#cabecalho").append("<tr><th>ID</th><th>Nome</th><th>Idade</th></tr>");
                             let row = $('<tr>').appendTo('#registro');
                             $('<td>').text(data.id).appendTo(row);
                             $('<td>').text(data.nome).appendTo(row);
